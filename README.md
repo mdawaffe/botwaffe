@@ -1,7 +1,7 @@
 botwaffe
 ========
 
-botwaffe receives PubSubHubbub and likes all posts on a site via the WordPress.com REST API.
+botwaffe receives PubSubHubbub pings and likes all posts on a site via the WordPress.com REST API.
 
 Install
 -------
@@ -12,6 +12,7 @@ Configure
 ---------
 
 You'll need:
+
 1. A WordPress.com user, which will do the liking and
 2. A [WordPress.com app](https://developer.wordpress.com/apps/) registered under any WordPress.com user.
 
