@@ -2,7 +2,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-TOKEN=$( cat "$DIR"/../TOKEN )
+TOKEN=$( tail -n +2 "$DIR"/token.php | head -n 1 )
 FEED_URL=${1?"$0 FEED_URL"}
 SITE_URL=$( dirname "$FEED_URL" )
 ENCODED_SITE_URL=$( echo -n "$SITE_URL" | php -r 'echo urlencode( file_get_contents( "php://stdin" ) );' )
