@@ -1,0 +1,48 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+TOKEN=$( cat "$DIR"/../TOKEN )
+FEED_URL=${1?"$0 FEED_URL"}
+SITE_URL=$( dirname "$FEED_URL" )
+ENCODED_SITE_URL=$( echo -n "$SITE_URL" | php -r 'echo urlencode( file_get_contents( "php://stdin" ) );' )
+
+function log_line {
+	echo -n `date --utc +'[%Y-%m-%dT%H:%M:%S%z]'` >> "$DIR"/log && echo " $1" >> "$DIR"/log
+}
+
+log_line "RECEIVE PROCESS: feed=$FEED_URL"
+
+function GET {
+	curl -s -H "Authorization: Bearer $TOKEN" "https://public-api.wordpress.com/rest/v1.1/sites/$ENCODED_SITE_URL/$1"
+}
+
+function POST {
+	URL_PATH=$1
+	shift
+	curl -s -X POST -H "Authorization: Bearer $TOKEN" "https://public-api.wordpress.com/rest/v1.1/sites/$ENCODED_SITE_URL/$URL_PATH" "$@"
+}
+
+while read -r POST_ID I_LIKE; do
+	case "$I_LIKE" in
+	1|true)
+#TODO: log levels? log to stdout?
+#		echo "POST_ID: $POST_ID - ALREADY"
+#		log_line "RECEIVE PROCESS: feed=$FEED_URL, post_id=$POST_ID ALREADY"
+		continue
+		;;
+	0|false)
+#		echo "POST_ID: $POST_ID - LIKING..."
+		log_line "RECEIVE PROCESS: feed=$FEED_URL, post_id=$POST_ID LIKING..."
+		POST "posts/$POST_ID/likes/new" > /dev/null
+		if [ 0 -eq $? ]; then
+			log_line "RECEIVE PROCESS: feed=$FEED_URL, post_id=$POST_ID LIKED!"
+		else
+			log_line "RECEIVE PROCESS: feed=$FEED_URL, post_id=$POST_ID LIKE FAILED!"
+		fi
+		;;
+	esac
+done < <( GET "posts/?after=2016-02-03T17:05:30&number=10" \
+	| jshon \
+		-e posts -a -e ID -u -p -e i_like -u \
+	| paste -s -d '\t\n' - )

@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+
+$sites = require __DIR__ . '/../sites.php';
+
+if ( empty( $argv[1] ) || ! isset( $sites[$argv[1]] ) ) {
+	fwrite( STDERR, "$argv[0] SITE\n" );
+	exit( 1 );
+}
+
+$body = [
+	'hub.callback'     => 'https://receive.blogwaffe.com/',
+	'hub.mode'         => 'subscribe',
+	'hub.topic'        => $argv[1],
+	'hub.verify'       => 'sync',
+	'hub.secret'       => $sites[$argv[1]]['secret'],
+	'hub.verify_token' => $sites[$argv[1]]['token'],
+];
+
+$context = stream_context_create( [
+	'http' => [
+		'method'        => 'POST',
+		'header'        => 'Content-Type: application/x-www-form-urlencoded',
+		'content'       => http_build_query( $body ),
+		'ignore_errors' => true,
+	],
+] );
+
+$contents = file_get_contents( $sites[$argv[1]]['hub'], false, $context );
+var_dump( $http_response_header );
+die( "$contents\n" );
