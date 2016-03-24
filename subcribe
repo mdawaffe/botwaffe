@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$sites = require __DIR__ . '/../sites.php';
+$sites = @include __DIR__ . '/data/sites.php';
 
 if ( empty( $argv[1] ) || ! isset( $sites[$argv[1]] ) ) {
 	fwrite( STDERR, "$argv[0] SITE\n" );

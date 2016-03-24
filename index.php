@@ -1,6 +1,6 @@
 <?php
 
-$sites = require __DIR__ . '/../sites.php';
+$sites = require __DIR__ . '/data/sites.php';
 $log = fopen( __DIR__ . '/log', 'a' );
 
 function log_line( $line ) {

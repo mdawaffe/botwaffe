@@ -16,7 +16,7 @@ default:
 }
 
 function cli_input() {
-	$client = fopen( __DIR__ . '/client.php', 'w' );
+	$client = fopen( __DIR__ . '/data/client.php', 'w' );
 
 	echo "1. Log in to WordPress.com at https://developer.wordpress.com/apps/\n";
 	echo "2. Create a new application:\n";
@@ -51,7 +51,7 @@ function cli_input() {
 function receive_token() {
 	header( 'Content-Type: text/plain' );
 
-	$client = require __DIR__ . '/client.php';
+	$client = require __DIR__ . '/data/client.php';
 
 	if ( isset( $_GET['code'] ) ) {
 		$post = stream_context_create( array(
@@ -77,7 +77,7 @@ function receive_token() {
 
 		$response = json_decode( $response );
 
-		$token_handle = fopen( __DIR__ . '/token.php', 'w' );
+		$token_handle = fopen( __DIR__ . '/data/token.php', 'w' );
 		$token_handle = fwrite( $token_handle, sprintf( "<?php /*\n%s\n*/", $response->access_token ) );
 		die( 'Done. Close this page.' );
 	}

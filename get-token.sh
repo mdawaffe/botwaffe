@@ -1,8 +1,9 @@
 #!/bin/bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+TOKEN_FILE="$DIR"/data/token.php
 
-touch "$DIR"/token.php;
+touch "$TOKEN_FILE";
 
 function stat_compat {
 	stat --format '%c' . 2> /dev/null
@@ -13,12 +14,12 @@ function stat_compat {
 	fi
 }
 
-TOKEN_MTIME=$( stat_compat "$DIR"/token.php )
+TOKEN_MTIME=$( stat_compat "$TOKEN_FILE" )
 
 php -S 0.0.0.0:23166 "$DIR"/get-token.php -t "$DIR" &> /dev/null &
 GET_TOKEN_PID=$!
 
-while [ "$( stat_compat "$DIR"/token.php )" -eq "$TOKEN_MTIME" ]; do
+while [ "$( stat_compat "$TOKEN_FILE" )" -eq "$TOKEN_MTIME" ]; do
 	sleep 1
 done
 
