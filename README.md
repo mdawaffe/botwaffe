@@ -3,6 +3,11 @@ botwaffe
 
 botwaffe receives PubSubHubbub pings and likes all posts on a site via the WordPress.com REST API.
 
+Requirements
+------------
+
+* [`jshon`](http://kmkeen.com/jshon/)
+
 Install
 -------
 1. `make install`
