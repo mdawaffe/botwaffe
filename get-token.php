@@ -46,6 +46,7 @@ function cli_input() {
 	) );
 
 	echo "4. Go to $url\n";
+	echo "5. Make sure you're logged in as the user you want likes to come from.\n";
 }
 
 function receive_token() {
