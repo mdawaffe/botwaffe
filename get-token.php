@@ -16,13 +16,16 @@ default:
 }
 
 function cli_input() {
+	$botwaffe_url = trim( file_get_contents( __DIR__ . '/data/URL' ) );
+	$botwaffe_origin = preg_replace( '#https?://[^/]+\K/.*$#', '', $botwaffe_url );
+
 	$client = fopen( __DIR__ . '/data/client.php', 'w' );
 
 	echo "1. Log in to WordPress.com at https://developer.wordpress.com/apps/\n";
 	echo "2. Create a new application:\n";
 	echo "   Name        : botwaffe-client-{your-wordpress.com-username}\n";
-	echo "   Website URL : https://your.domain/path/to/botwaffe/\n";
-	echo "   Redirect URL: https://your.domain:23166/\n";
+	echo "   Website URL : $botwaffe_url\n";
+	echo "   Redirect URL: $botwaffe_origin:23166/\n";
 	echo "3. Past the following app details here:\n";
 	echo "   Client ID    : ";
 	$client_id = trim( fgets( STDIN ) );
