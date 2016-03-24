@@ -1,8 +1,5 @@
 <?php
 
-ini_set( 'display_errors', false );
-error_reporting( 0 );
-
 switch ( php_sapi_name() ) {
 case 'cli' :
 	cli_input();
