@@ -79,6 +79,7 @@ if ( ! isset( $sites[$argv[1]] ) ) {
 $botwaffe_url = trim( file_get_contents( __DIR__ . '/data/URL' ) );
 
 $body = [
+	// TODO: the callback should be $botwaffe_url?topic=$topic to simplify processing
 	'hub.callback'     => $botwaffe_url,
 	'hub.mode'         => 'subscribe',
 	'hub.topic'        => $argv[1],
